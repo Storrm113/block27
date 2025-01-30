@@ -1,5 +1,5 @@
-import axios from 'axios';
 import React, {useState} from 'react'
+import axios from 'axios';
 
 function SignupForm() {
     const [username, setUsername] = useState('');
@@ -10,23 +10,36 @@ function SignupForm() {
     async function handleSubmit(e) {
         e.preventDefault();
         try{
-            const data = await axios.post('https://fsa-jwt-practice.herokuapp.com/signup', {username, password});
-        }catch(err){console.error(err)}
+            const data = await axios.post(
+                "https://fsa-jwt-practice.herokuapp.com/signup", 
+                {username, password}
+            );
+            console.log(data.data);
+            } catch(err){console.error(err)}
         }
        
-  return (<div>
+  return (
+  <div>
     <h2>SignupForm</h2>
-    {error && <p>Error Signing Up</p>}
-    <form action="">
-        <label htmlFor="">
+    {error?.mesage && <p>Error Signing Up</p>}
+    <form onSubmit={handleSubmit}>
+        <label>
             <p>Username:</p>
-            <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+            <input
+             type="text" 
+             value={username} 
+             onChange={(e) => setUsername(e.target.value)} 
+             />
         </label>
-        <label htmlFor="">
+        <label>
             <p>Password:</p>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+            <input
+             type="password"
+             value={password}
+             onChange={(e) => setPassword(e.target.value)}
+            />
         </label>
-        <button onClick={handleSubmit}>Signup</button>
+        <button style={{display: "block"}}>Submit</button>
     </form>
     </div>)
 }
