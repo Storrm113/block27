@@ -1,6 +1,7 @@
 import react, {useState} from 'react'
 import SignupForm from './components/SignupForm/SignupForm'
 import Authenticate from './components/Authenticate/Authenticate'
+import './App.css'
 
 function App() {
 const [token, setToken] = useState(null);
