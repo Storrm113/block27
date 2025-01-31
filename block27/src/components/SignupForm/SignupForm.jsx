@@ -6,16 +6,26 @@ function SignupForm({ setToken }) {
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  console.log(username);
+  const [validationError, setValidationError] = useState("");
+
+  const validateForm = () => {
+    if (username.length < 8) {
+      setValidationError("Username must be at least 8 characters long.");
+      return false;
+    }
+    setValidationError("");
+    return true;
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!validateForm()) return;
+
     try {
       const data = await axios.post(
         "https://fsa-jwt-practice.herokuapp.com/signup",
         { username, password }
       );
-      console.log(data.data);
       if (data.data.success) {
         setToken(data.data.token);
         setSuccess(true);
@@ -23,15 +33,16 @@ function SignupForm({ setToken }) {
         setPassword("");
       }
     } catch (err) {
-      console.error(err.message);
+      setError(err);
     }
   }
 
   return (
     <div>
       <h2>SignupForm</h2>
-      {error?.message && <p>Error Signing Up</p>}
-      {success && <p>Signed Up Successfully</p>}
+      {error && <p className="error">Error Signing Up</p>}
+      {success && <p className="success">Signed Up Successfully</p>}
+      {validationError && <p className="error">{validationError}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           <p>Username:</p>
@@ -49,7 +60,7 @@ function SignupForm({ setToken }) {
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        <button style={{ display: "block" }}>Submit</button>
+        <button type="submit">Sign Up</button>
       </form>
     </div>
   );
